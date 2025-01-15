@@ -1,4 +1,5 @@
-﻿using LambdaEngine.PhysicsSystem;
+﻿using LambdaEngine.AssetManagementSystem;
+using LambdaEngine.PhysicsSystem;
 using LambdaEngine.PlatformSystem;
 using LambdaEngine.SceneModule;
 using LambdaEngine.TimeSystem;
@@ -8,18 +9,22 @@ namespace LambdaEngine;
 #nullable disable
 
 public class LambdaEngine {
-    public readonly IPlatformSystem platformSystem = null;
+    public readonly IAssetManagementSystem assetManagementSystem;
+    public readonly IPlatformSystem platformSystem;
     public readonly ITimeSystem timeSystem;
     public readonly IPhysicsSystem physicsSystem;
     
     public IScene Scene { get; private set; }
 
-    public LambdaEngine(ITimeSystem timeSystem, IPhysicsSystem physicsSystem) {
+    public LambdaEngine(IAssetManagementSystem assetManagementSystem, IPlatformSystem platformSystem, ITimeSystem timeSystem, IPhysicsSystem physicsSystem) {
+        this.assetManagementSystem = assetManagementSystem;
+        this.platformSystem = platformSystem;
         this.timeSystem = timeSystem;
         this.physicsSystem = physicsSystem;
     }
 
     public void Initialize(IScene startScene) {
+        AssetManagement.Initialize(assetManagementSystem);
         Physics.Initialize(physicsSystem);
         Time.Initialize(timeSystem);
         Platform.Initialize(platformSystem);
