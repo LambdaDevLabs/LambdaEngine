@@ -14,7 +14,7 @@ public static class Render {
     /// Initializes the RenderSystem wrapper.
     /// </summary>
     /// <param name="renderSystem"></param>
-    public static void Initialize(IRenderSystem renderSystem) {
+    public static void Connect(IRenderSystem renderSystem) {
         Render.renderSystem = renderSystem;
     }
 }

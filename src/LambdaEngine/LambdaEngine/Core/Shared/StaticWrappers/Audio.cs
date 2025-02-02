@@ -14,7 +14,7 @@ public static class Audio {
     /// Initializes the AudioSystem wrapper.
     /// </summary>
     /// <param name="audioSystem"></param>
-    public static void Initialize(IAudioSystem audioSystem) {
+    public static void Connect(IAudioSystem audioSystem) {
         Audio.audioSystem = audioSystem;
     }
 }

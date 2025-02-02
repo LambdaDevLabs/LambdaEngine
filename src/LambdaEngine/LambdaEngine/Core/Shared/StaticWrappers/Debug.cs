@@ -14,8 +14,15 @@ public static class Debug {
     /// Initializes the DebugSystem wrapper.
     /// </summary>
     /// <param name="debugSystem"></param>
-    public static void Initialize(IDebugSystem debugSystem) {
+    public static void Connect(IDebugSystem debugSystem) {
         Debug.debugSystem = debugSystem;
+    }
+
+    /// <summary>
+    /// Initializes the debugger.
+    /// </summary>
+    public static void Initialize() {
+        debugSystem.Initialize();
     }
     
     /// <summary>

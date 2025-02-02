@@ -5,16 +5,16 @@ namespace LambdaEngine;
 #nullable disable
 
 /// <summary>
-/// Static wrapper class for easy access to the AudioSystem.
+/// Static wrapper class for easy access to the AssetManagementSystem.
 /// </summary>
 public static class AssetManagement {
     private static IAssetManagementSystem assetManagementSystem;
 
     /// <summary>
-    /// Initializes the AudioSystem wrapper.
+    /// Initializes the AssetManagementSystem wrapper.
     /// </summary>
-    /// <param name="audioSystem"></param>
-    public static void Initialize(IAssetManagementSystem assetManagementSystem) {
+    /// <param name="assetManagementSystem"></param>
+    public static void Connect(IAssetManagementSystem assetManagementSystem) {
         AssetManagement.assetManagementSystem = assetManagementSystem;
     }
 }

@@ -14,7 +14,7 @@ public static class Input {
     /// Initializes the InputSystem wrapper.
     /// </summary>
     /// <param name="inputSystem"></param>
-    public static void Initialize(IInputSystem inputSystem) {
+    public static void Connect(IInputSystem inputSystem) {
         Input.inputSystem = inputSystem;
     }
 }

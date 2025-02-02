@@ -22,7 +22,7 @@ public static class Time {
     /// Initializes the TimeSystem wrapper.
     /// </summary>
     /// <param name="timeSystem"></param>
-    public static void Initialize(ITimeSystem timeSystem) {
+    public static void Connect(ITimeSystem timeSystem) {
         Time.timeSystem = timeSystem;
     }
 

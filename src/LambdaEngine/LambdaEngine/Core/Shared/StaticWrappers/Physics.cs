@@ -14,7 +14,7 @@ public static class Physics {
     /// Initializes the PhysicsSystem wrapper.
     /// </summary>
     /// <param name="physicsSystem"></param>
-    public static void Initialize(IPhysicsSystem physicsSystem) {
+    public static void Connect(IPhysicsSystem physicsSystem) {
         Physics.physicsSystem = physicsSystem;
     }
 

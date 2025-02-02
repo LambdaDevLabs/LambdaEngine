@@ -16,7 +16,7 @@ public class LambdaEngine {
     public readonly ITimeSystem timeSystem;
     public readonly IPhysicsSystem physicsSystem;
     
-    private IScene StartScene { get; set; }
+    public IScene Scene { get; private set; }
 
     public LambdaEngine(IDebugSystem debugSystem, IAssetManagementSystem assetManagementSystem, IPlatformSystem platformSystem, ITimeSystem timeSystem, IPhysicsSystem physicsSystem) {
         this.debugSystem = debugSystem;
@@ -25,58 +25,40 @@ public class LambdaEngine {
         this.timeSystem = timeSystem;
         this.physicsSystem = physicsSystem;
     }
-
-    /// <summary>
-    /// Initializes the engine by initializing all systems and setting the start scene.
-    /// </summary>
-    /// <param name="startScene"></param>
-    public void Initialize(IScene startScene) {
+    
+    public void Initialize(bool startLiveDebugger, IScene startScene) {
+        AssetManagement.Connect(assetManagementSystem);
+        Physics.Connect(physicsSystem);
+        Time.Connect(timeSystem);
+        Platform.Connect(platformSystem);
+        Input.Connect(platformSystem.InputSystem);
+        Render.Connect(platformSystem.RenderSystem);
+        Audio.Connect(platformSystem.AudioSystem);
+        Debug.Connect(debugSystem);
+        
         // Initialize and start the Debug system first, to allow its usage as soon as possible.
-        Debug.Initialize(debugSystem);
+        Debug.Connect(debugSystem);
+        Debug.Initialize();
         Debug.Start();
         
-        AssetManagement.Initialize(assetManagementSystem);
+        platformSystem.Initialize();
+        platformSystem.CreateWindow();
         
-        Physics.Initialize(physicsSystem);
-        Time.Initialize(timeSystem);
-        Platform.Initialize(platformSystem);
-        Input.Initialize(platformSystem.InputSystem);
-        Render.Initialize(platformSystem.RenderSystem);
-        Audio.Initialize(platformSystem.AudioSystem);
+        platformSystem.RenderSystem.Initialize(platformSystem);
         
-        StartScene = startScene;
-
-        timeSystem.OnUpdate += startScene.OnUpdate;
+        // Scene = startScene;
+        //
+        // timeSystem.OnUpdate += startScene.OnUpdate;
     }
 
-    /// <summary>
-    /// Loads the start scene.
-    /// </summary>
-    public void Load() {
-        if (StartScene is null) {
+    public void Run() {
+        if (Scene is null) {
             throw new InvalidOperationException("Unable to run: missing start scene. Was the engine initialized?");
         }
-    }
-
-    /// <summary>
-    /// Starts the gameloop.
-    /// </summary>
-    public void Run() {
         
+        timeSystem.Run();
     }
 
-    /// <summary>
-    /// Loads the start scene and starts the gameloop.
-    /// </summary>
-    /// <exception cref="InvalidOperationException"></exception>
-    public void LoadAndRun() {
-        Load();
-        Run();
-    }
-
-    /// <summary>
-    /// Stops the gamelood and unloads the current scene.
-    /// </summary>
     public void Stop() {
         timeSystem.Stop = true;
     }
