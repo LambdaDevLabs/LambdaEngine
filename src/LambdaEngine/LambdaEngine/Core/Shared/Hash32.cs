@@ -3,7 +3,7 @@
 namespace LambdaEngine;
 
 /// <summary>
-/// Represents a 32bit hash value.
+/// Represents a 32-byte hash value.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
 public readonly record struct Hash32 {
