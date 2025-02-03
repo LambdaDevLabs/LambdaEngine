@@ -35,11 +35,14 @@ public class DefaultRenderSystem : IRenderSystem {
                 h = sprite.TextureHeight
             };
             
+            float scaledWidth = sprite.TextureWidth * sprite.scale.X;
+            float scaledHeight = sprite.TextureHeight * sprite.scale.Y;
+            
             SDL.SDL_FRect dstRect = new() {
-                x = sprite.position.X,
-                y = sprite.position.Y,
-                w = sprite.TextureWidth * sprite.scale.X,
-                h = sprite.TextureHeight * sprite.scale.Y
+                x = sprite.position.X - scaledWidth * 0.5f,
+                y = sprite.position.Y - scaledHeight * 0.5f,
+                w = scaledWidth,
+                h = scaledHeight
             };
 
             SDL.SDL_SetTextureColorMod(sprite.TextureHandle, sprite.color.R, sprite.color.G, sprite.color.B);
