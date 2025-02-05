@@ -24,7 +24,7 @@ public class SpriteRenderer : Component, ITransformListener {
         if (sprite == null) {
             return;
         }
-        Debug.Log("Propagated position to sprite.");
+        
         sprite.Position = transform.Position;
     }
 }

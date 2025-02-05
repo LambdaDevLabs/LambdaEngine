@@ -15,7 +15,6 @@ public class Transform : Component {
     }
 
     private void UpdateListeners() {
-        Debug.Log("Updating listeners");
         foreach (ITransformListener listener in listeners) {
             listener.TransformUpdate(this);
         }
