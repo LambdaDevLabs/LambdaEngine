@@ -46,9 +46,7 @@ public class LambdaEngine {
         
         platformSystem.RenderSystem.Initialize(platformSystem);
         
-        // Scene = startScene;
-        //
-        // timeSystem.OnUpdate += startScene.OnUpdate;
+        Scene = startScene;
     }
 
     public void Run() {
@@ -56,10 +54,10 @@ public class LambdaEngine {
             throw new InvalidOperationException("Unable to run: missing start scene. Was the engine initialized?");
         }
         
-        timeSystem.Run();
+        timeSystem.StartGameLoop();
     }
 
     public void Stop() {
-        timeSystem.Stop = true;
+        timeSystem.StopGameLoop();
     }
 }
