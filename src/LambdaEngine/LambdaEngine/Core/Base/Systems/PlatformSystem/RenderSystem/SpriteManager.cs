@@ -1,5 +1,4 @@
-﻿using LambdaEngine.DebugSystem;
-using SDL3;
+﻿using SDL3;
 
 namespace LambdaEngine.PlatformSystem.RenderSystem;
 

@@ -32,7 +32,7 @@ public class LambdaEngine {
         Time.Connect(timeSystem);
         Platform.Connect(platformSystem);
         Input.Connect(platformSystem.InputSystem);
-        Render.Connect(platformSystem.RenderSystem);
+        Renderer.Connect(platformSystem.RenderSystem);
         Audio.Connect(platformSystem.AudioSystem);
         Debug.Connect(debugSystem);
         

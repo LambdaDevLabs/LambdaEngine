@@ -13,6 +13,13 @@ public interface IRenderSystem {
     /// </summary>
     /// <param name="platformSystem"></param>
     public void Initialize(IPlatformSystem platformSystem);
+    
+    /// <summary>
+    /// Creates a new sprite based on the specified path.
+    /// </summary>
+    /// <param name="sprite"></param>
+    /// <returns></returns>
+    public ISprite CreateSprite(string path);
 
     /// <summary>
     /// Renders all existing sprites to the screen.

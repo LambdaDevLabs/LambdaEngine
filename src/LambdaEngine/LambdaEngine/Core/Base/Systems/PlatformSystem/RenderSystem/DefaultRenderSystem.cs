@@ -20,7 +20,11 @@ public class DefaultRenderSystem : IRenderSystem {
         
         Debug.Log($"DefaultRenderSystem initialized.", LogLevel.INFO);
     }
-    
+
+    public ISprite CreateSprite(string path) {
+        return Sprite.FromFile(path);
+    }
+
     public void Render() {
         SDL.SDL_SetRenderDrawColor(rendererHandle,
             BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A);
