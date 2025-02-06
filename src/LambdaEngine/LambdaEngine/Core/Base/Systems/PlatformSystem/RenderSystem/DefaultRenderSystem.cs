@@ -12,13 +12,18 @@ public class DefaultRenderSystem : IRenderSystem {
     
     public Color BackgroundColor { get; set; } = Color.CornflowerBlue;
 
+    public int initTextureBufferSize = 256;
+    public int initSpriteBufferSize = 512;
+    public bool autoIncrementTextureBuffer = true;
+    public bool autoIncrementSpriteBufferSize = true;
+
     public void Initialize(IPlatformSystem platformSystem) {
         rendererHandle = platformSystem.RendererHandle;
         
-        TexturePool.Initialize(rendererHandle, 256);
-        SpriteManager.Initialize(512);
+        TexturePool.Initialize(rendererHandle, 256, autoIncrementTextureBuffer);
+        SpriteManager.Initialize(512, autoIncrementSpriteBufferSize);
         
-        Debug.Log($"DefaultRenderSystem initialized.", LogLevel.INFO);
+        Debug.Log("DefaultRenderSystem initialized.", LogLevel.INFO);
     }
 
     public ISprite CreateSprite(string path) {

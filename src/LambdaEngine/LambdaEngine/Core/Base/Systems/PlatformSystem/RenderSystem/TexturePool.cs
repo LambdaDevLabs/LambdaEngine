@@ -10,6 +10,8 @@ public static unsafe class TexturePool {
     
     private static Dictionary<Hash32, int> textureHashes;
     private static SDL.SDL_Texture*[] textures;
+
+    private static bool autoIncrement;
     
     private static int next;
     
@@ -23,8 +25,8 @@ public static unsafe class TexturePool {
         get => textures.Length - next;
     }
 
-    // ReSharper disable once ParameterHidesMember
-    public static void Initialize(IntPtr rendererHandle, int bufferSize) {
+    // ReSharper disable method ParameterHidesMember
+    public static void Initialize(IntPtr rendererHandle, int bufferSize, bool autoIncrement) {
         if (IsInitialized) {
             throw new Exception("Cannot initialize; already initialized.");
         }
@@ -33,6 +35,8 @@ public static unsafe class TexturePool {
         
         textures = new SDL.SDL_Texture*[bufferSize];
         textureHashes = new Dictionary<Hash32, int>(bufferSize);
+        
+        TexturePool.autoIncrement = autoIncrement;
 
         IsInitialized = true;
     }
@@ -50,7 +54,12 @@ public static unsafe class TexturePool {
         }
         else {
             if (CapacityLeft == 0) {
-                throw new Exception("Unable load new texture: no capacity left.");
+                if (autoIncrement) {
+                    IncrementCapacity();
+                }
+                else {
+                    throw new Exception("Unable load new texture: no capacity left.");
+                }
             }
             
             SDL.SDL_Surface* surface = SDL.SDL_LoadBMP(path);
@@ -88,7 +97,12 @@ public static unsafe class TexturePool {
         }
         else {
             if (CapacityLeft == 0) {
-                throw new Exception("Unable load new texture: no capacity left.");
+                if (autoIncrement) {
+                    IncrementCapacity();
+                }
+                else {
+                    throw new Exception("Unable load new texture: no capacity left.");
+                }
             }
             
             SDL.SDL_Surface* surface = SDL.SDL_LoadBMP(path);
@@ -174,6 +188,10 @@ public static unsafe class TexturePool {
         }
         
         throw new KeyNotFoundException($"Texture {textureHandle} not found.");
+    }
+
+    private static void IncrementCapacity() {
+        throw new NotImplementedException();
     }
     
     /// <summary>
