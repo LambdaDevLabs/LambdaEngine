@@ -46,6 +46,8 @@ public class LambdaEngine {
         
         platformSystem.RenderSystem.Initialize(platformSystem);
         
+        physicsSystem.Initialize();
+
         // Scene = startScene;
         //
         // timeSystem.OnUpdate += startScene.OnUpdate;

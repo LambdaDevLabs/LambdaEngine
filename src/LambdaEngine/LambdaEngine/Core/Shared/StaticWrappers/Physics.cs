@@ -19,12 +19,11 @@ public static class Physics {
     }
 
     /// <summary>
-    /// Creates a new PhysicsObject and registers it in the PhysicsSystem.
+    /// Creates a new BoxCollider and registers it in the PhysicsSystem.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IPhysicsObject CreatePhysicsObject<T>() where T : IPhysicsObject, new() {
-        return physicsSystem.CreatePhysicsObject<T>();
+    public static IBoxCollider CreateBoxCollider() {
+        return physicsSystem.CreateBoxCollider();
     }
 
     /// <summary>
