@@ -20,11 +20,15 @@ public class DefaultRenderSystem : IRenderSystem {
     public bool autoIncrementTextureBuffer = true;
     public bool autoIncrementSpriteBufferSize = true;
 
+    public VSyncMode vSyncMode = VSyncMode.NORMAL;
+
     public void Initialize(IPlatformSystem platformSystem) {
         rendererHandle = platformSystem.RendererHandle;
         
         TexturePool.Initialize(rendererHandle, initTextureBufferSize, autoIncrementTextureBuffer);
         SpriteManager.Initialize(initSpriteBufferSize, autoIncrementSpriteBufferSize);
+
+        SDL.SDL_SetRenderVSync(rendererHandle, (int)vSyncMode);
         
         Debug.Log("DefaultRenderSystem initialized.", LogLevel.INFO);
     }
