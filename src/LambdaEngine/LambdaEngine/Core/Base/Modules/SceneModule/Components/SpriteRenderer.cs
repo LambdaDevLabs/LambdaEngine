@@ -16,6 +16,8 @@ public class SpriteRenderer : Component, ITransformListener {
     /// <returns></returns>
     public ISprite CreateSprite(string path) {
         sprite = Renderer.CreateSprite(path);
+
+        sprite.Position = transform.Position;
         
         return sprite;
     }

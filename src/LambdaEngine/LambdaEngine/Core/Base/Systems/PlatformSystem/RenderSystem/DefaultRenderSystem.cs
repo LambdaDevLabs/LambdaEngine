@@ -12,6 +12,9 @@ public class DefaultRenderSystem : IRenderSystem {
     
     public Color BackgroundColor { get; set; } = Color.CornflowerBlue;
 
+    // ReSharper disable class FieldCanBeMadeReadOnly.Global
+    // ReSharper disable class MemberCanBePrivate.Global
+    // ReSharper disable class ConvertToConstant.Global
     public int initTextureBufferSize = 256;
     public int initSpriteBufferSize = 512;
     public bool autoIncrementTextureBuffer = true;
@@ -20,8 +23,8 @@ public class DefaultRenderSystem : IRenderSystem {
     public void Initialize(IPlatformSystem platformSystem) {
         rendererHandle = platformSystem.RendererHandle;
         
-        TexturePool.Initialize(rendererHandle, 256, autoIncrementTextureBuffer);
-        SpriteManager.Initialize(512, autoIncrementSpriteBufferSize);
+        TexturePool.Initialize(rendererHandle, initTextureBufferSize, autoIncrementTextureBuffer);
+        SpriteManager.Initialize(initSpriteBufferSize, autoIncrementSpriteBufferSize);
         
         Debug.Log("DefaultRenderSystem initialized.", LogLevel.INFO);
     }

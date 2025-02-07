@@ -16,9 +16,11 @@ public class LambdaEngine {
     public readonly ITimeSystem timeSystem;
     public readonly IPhysicsSystem physicsSystem;
     
+    public readonly ISceneModule sceneModule;
+    
     public IScene Scene { get; private set; }
 
-    public LambdaEngine(IDebugSystem debugSystem, IAssetManagementSystem assetManagementSystem, IPlatformSystem platformSystem, ITimeSystem timeSystem, IPhysicsSystem physicsSystem) {
+    public LambdaEngine(IDebugSystem debugSystem, IAssetManagementSystem assetManagementSystem, IPlatformSystem platformSystem, ITimeSystem timeSystem, IPhysicsSystem physicsSystem, ISceneModule sceneModule) {
         this.debugSystem = debugSystem;
         this.assetManagementSystem = assetManagementSystem;
         this.platformSystem = platformSystem;
@@ -36,10 +38,14 @@ public class LambdaEngine {
         Audio.Connect(platformSystem.AudioSystem);
         Debug.Connect(debugSystem);
         
+        Scenes.Connect(sceneModule);
+        
         // Initialize and start the Debug system first, to allow its usage as soon as possible.
         Debug.Connect(debugSystem);
         Debug.Initialize();
         Debug.Start();
+        
+        sceneModule.Initialize();
         
         platformSystem.Initialize();
         platformSystem.CreateWindow();

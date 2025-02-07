@@ -282,6 +282,8 @@ public static class SpriteManager {
         if (sprites.Length >= capacity) {
             return;
         }
+        
+        Debug.Log($"Capacity: {Capacity}, CapacityLeft: {CapacityLeft}, New Capacity: {capacity}");
 
         SpriteObject[] newArr = new SpriteObject[capacity];
 
