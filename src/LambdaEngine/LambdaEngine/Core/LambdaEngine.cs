@@ -45,12 +45,13 @@ public class LambdaEngine {
         Debug.Initialize();
         Debug.Start();
         
-        sceneModule.Initialize();
+        // sceneModule.Initialize();
         
         platformSystem.Initialize();
         platformSystem.CreateWindow();
         
         platformSystem.RenderSystem.Initialize(platformSystem);
+        platformSystem.InputSystem.Initialize();
         
         Scene = startScene;
     }
