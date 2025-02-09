@@ -26,6 +26,7 @@ public class LambdaEngine {
         this.platformSystem = platformSystem;
         this.timeSystem = timeSystem;
         this.physicsSystem = physicsSystem;
+        this.sceneModule = sceneModule;
     }
     
     public void Initialize(bool startLiveDebugger, IScene startScene) {
@@ -45,13 +46,13 @@ public class LambdaEngine {
         Debug.Initialize();
         Debug.Start();
         
-        // sceneModule.Initialize();
-        
         platformSystem.Initialize();
         platformSystem.CreateWindow();
         
         platformSystem.RenderSystem.Initialize(platformSystem);
         platformSystem.InputSystem.Initialize();
+        
+        sceneModule.Initialize();
         
         Scene = startScene;
     }
@@ -60,6 +61,8 @@ public class LambdaEngine {
         if (Scene is null) {
             throw new InvalidOperationException("Unable to run: missing start scene. Was the engine initialized?");
         }
+        
+        Scene.Initialize();
         
         timeSystem.StartGameLoop();
     }

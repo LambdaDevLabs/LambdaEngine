@@ -4,7 +4,16 @@ using LambdaEngine.SceneModule;
 namespace LambdaEngine;
 
 public class Scene : IScene {
+    private readonly DefaultSceneModule sceneModule;
     private readonly List<GameObject> gameObjects = new(64);
+
+    public Scene(DefaultSceneModule sceneModule) {
+        this.sceneModule = sceneModule;
+    }
+
+    public void Initialize() {
+        Time.SubscribeToUpdate(InvokeUpdateEvent);
+    }
 
     public GameObject Instantiate() {
         return Instantiate(Vector2.Zero);
@@ -29,7 +38,13 @@ public class Scene : IScene {
         return gameObject;
     }
 
-    public void DestroyGameObjects(GameObject gameObject) {
+    public void DestroyGameObject(GameObject gameObject) {
         gameObjects.Remove(gameObject);
+    }
+
+    private void InvokeUpdateEvent() {
+        foreach (GameObject gameObject in gameObjects) {
+            sceneModule.InvokeUpdateEvents(gameObject.GetComponents<BehaviourComponent>());
+        }
     }
 }
