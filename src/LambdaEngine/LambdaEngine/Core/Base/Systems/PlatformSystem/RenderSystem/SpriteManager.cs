@@ -1,4 +1,5 @@
-﻿using SDL3;
+﻿using LambdaEngine.DebugSystem;
+using SDL3;
 
 namespace LambdaEngine.PlatformSystem.RenderSystem;
 
@@ -283,7 +284,7 @@ public static class SpriteManager {
             return;
         }
         
-        Debug.Log($"Capacity: {Capacity}, CapacityLeft: {CapacityLeft}, New Capacity: {capacity}");
+        Debug.Log($"Resizing SpriteManager capacity from {Capacity} to {capacity}.", LogLevel.INFO);
 
         SpriteObject[] newArr = new SpriteObject[capacity];
 
@@ -298,6 +299,8 @@ public static class SpriteManager {
 
         spritePositionToId.EnsureCapacity(capacity);
         spriteIdToPosition.EnsureCapacity(capacity);
+
+        memory = sprites;
     }
 
     /// <summary>
