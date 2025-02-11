@@ -12,13 +12,25 @@ public class DefaultRenderSystem : IRenderSystem {
     
     public Color BackgroundColor { get; set; } = Color.CornflowerBlue;
 
+    // ReSharper disable class FieldCanBeMadeReadOnly.Global
+    // ReSharper disable class MemberCanBePrivate.Global
+    // ReSharper disable class ConvertToConstant.Global
+    public int initTextureBufferSize = 256;
+    public int initSpriteBufferSize = 512;
+    public bool autoIncrementTextureBuffer = true;
+    public bool autoIncrementSpriteBufferSize = true;
+
+    public VSyncMode vSyncMode = VSyncMode.NORMAL;
+
     public void Initialize(IPlatformSystem platformSystem) {
         rendererHandle = platformSystem.RendererHandle;
         
-        TexturePool.Initialize(rendererHandle, 256);
-        SpriteManager.Initialize(512);
+        TexturePool.Initialize(rendererHandle, initTextureBufferSize, autoIncrementTextureBuffer);
+        SpriteManager.Initialize(initSpriteBufferSize, autoIncrementSpriteBufferSize);
+
+        SDL.SDL_SetRenderVSync(rendererHandle, (int)vSyncMode);
         
-        Debug.Log($"DefaultRenderSystem initialized.", LogLevel.INFO);
+        Debug.Log("DefaultRenderSystem initialized.", LogLevel.INFO);
     }
 
     public ISprite CreateSprite(string path) {

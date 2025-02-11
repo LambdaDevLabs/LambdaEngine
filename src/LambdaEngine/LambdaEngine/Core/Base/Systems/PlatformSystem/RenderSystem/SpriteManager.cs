@@ -1,4 +1,5 @@
-﻿using SDL3;
+﻿using LambdaEngine.DebugSystem;
+using SDL3;
 
 namespace LambdaEngine.PlatformSystem.RenderSystem;
 
@@ -11,6 +12,8 @@ public static class SpriteManager {
     private static Dictionary<int, int> spriteIdToPosition;
     private static Dictionary<int, int> spritePositionToId;
     private static SpriteObject[] sprites;
+
+    private static bool autoIncrement;
 
     private static Memory<SpriteObject> memory;
 
@@ -42,7 +45,7 @@ public static class SpriteManager {
     /// </summary>
     /// <param name="bufferSize">The initial capacity of the <see cref="SpriteManager"/>.</param>
     /// <exception cref="Exception">Throws an exception if the <see cref="SpriteManager"/> was already initialized.</exception>
-    public static void Initialize(int bufferSize) {
+    public static void Initialize(int bufferSize, bool autoIncrement) {
         if (IsInitialized) {
             throw new Exception("Cannot initialize; already initialized.");
         }
@@ -51,6 +54,8 @@ public static class SpriteManager {
         spriteIdToPosition = new Dictionary<int, int>(bufferSize);
         spritePositionToId = new Dictionary<int, int>(bufferSize);
         idProvider = new IdProvider(64 > bufferSize ? bufferSize : 64);
+        
+        SpriteManager.autoIncrement = autoIncrement;
 
         memory = sprites;
 
@@ -64,7 +69,12 @@ public static class SpriteManager {
     /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="SpriteManager"/>.</exception>
     public static unsafe int CreateSpriteFromFile(string path) {
         if (next >= sprites.Length) {
-            throw new Exception("Not enough capacity to add new sprite.");
+            if (autoIncrement) {
+                IncrementCapacity();
+            }
+            else {
+                throw new Exception("Not enough capacity to add new sprite.");
+            }
         }
     
         int id = idProvider.NextId();
@@ -83,7 +93,12 @@ public static class SpriteManager {
     /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="SpriteManager"/>.</exception>
     public static unsafe int CreateSpriteFromTexture(SDL.SDL_Texture* texture) {
         if (next >= sprites.Length) {
-            throw new Exception("Not enough capacity to add new sprite.");
+            if (autoIncrement) {
+                IncrementCapacity();
+            }
+            else {
+                throw new Exception("Not enough capacity to add new sprite.");
+            }
         }
     
         int id = idProvider.NextId();
@@ -103,8 +118,12 @@ public static class SpriteManager {
     /// <returns>True if the <see cref="Sprite"/> was successfully created, otherwise false.</returns>
     public static unsafe bool TryCreateSpriteFromFile(string path, out int id) {
         if (next >= sprites.Length) {
-            id = -1;
-            return false;
+            if (autoIncrement) {
+                IncrementCapacity();
+            }
+            else {
+                throw new Exception("Not enough capacity to add new sprite.");
+            }
         }
     
         id = idProvider.NextId();
@@ -124,8 +143,12 @@ public static class SpriteManager {
     /// <returns>True if the <see cref="Sprite"/> was successfully created, otherwise false.</returns>
     public static unsafe bool TryCreateSpriteFromTexture(SDL.SDL_Texture* texture, out int id) {
         if (next >= sprites.Length) {
-            id = -1;
-            return false;
+            if (autoIncrement) {
+                IncrementCapacity();
+            }
+            else {
+                throw new Exception("Not enough capacity to add new sprite.");
+            }
         }
     
         id = idProvider.NextId();
@@ -260,6 +283,8 @@ public static class SpriteManager {
         if (sprites.Length >= capacity) {
             return;
         }
+        
+        Debug.Log($"Resizing SpriteManager capacity from {Capacity} to {capacity}.", LogLevel.INFO);
 
         SpriteObject[] newArr = new SpriteObject[capacity];
 
@@ -274,6 +299,8 @@ public static class SpriteManager {
 
         spritePositionToId.EnsureCapacity(capacity);
         spriteIdToPosition.EnsureCapacity(capacity);
+
+        memory = sprites;
     }
 
     /// <summary>
@@ -296,6 +323,10 @@ public static class SpriteManager {
         }
         
         return ref sprites[value];
+    }
+
+    private static void IncrementCapacity() {
+        EnsureCapacity(sprites.Length * 2);
     }
 
     /// <summary>

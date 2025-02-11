@@ -16,14 +16,17 @@ public class LambdaEngine {
     public readonly ITimeSystem timeSystem;
     public readonly IPhysicsSystem physicsSystem;
     
+    public readonly ISceneModule sceneModule;
+    
     public IScene Scene { get; private set; }
 
-    public LambdaEngine(IDebugSystem debugSystem, IAssetManagementSystem assetManagementSystem, IPlatformSystem platformSystem, ITimeSystem timeSystem, IPhysicsSystem physicsSystem) {
+    public LambdaEngine(IDebugSystem debugSystem, IAssetManagementSystem assetManagementSystem, IPlatformSystem platformSystem, ITimeSystem timeSystem, IPhysicsSystem physicsSystem, ISceneModule sceneModule) {
         this.debugSystem = debugSystem;
         this.assetManagementSystem = assetManagementSystem;
         this.platformSystem = platformSystem;
         this.timeSystem = timeSystem;
         this.physicsSystem = physicsSystem;
+        this.sceneModule = sceneModule;
     }
     
     public void Initialize(bool startLiveDebugger, IScene startScene) {
@@ -36,6 +39,8 @@ public class LambdaEngine {
         Audio.Connect(platformSystem.AudioSystem);
         Debug.Connect(debugSystem);
         
+        Scenes.Connect(sceneModule);
+        
         // Initialize and start the Debug system first, to allow its usage as soon as possible.
         Debug.Connect(debugSystem);
         Debug.Initialize();
@@ -45,12 +50,11 @@ public class LambdaEngine {
         platformSystem.CreateWindow();
         
         platformSystem.RenderSystem.Initialize(platformSystem);
+        platformSystem.InputSystem.Initialize();
         
-        physicsSystem.Initialize();
-
-        // Scene = startScene;
-        //
-        // timeSystem.OnUpdate += startScene.OnUpdate;
+        sceneModule.Initialize();
+        
+        Scene = startScene;
     }
 
     public void Run() {
@@ -58,10 +62,12 @@ public class LambdaEngine {
             throw new InvalidOperationException("Unable to run: missing start scene. Was the engine initialized?");
         }
         
-        timeSystem.Run();
+        Scene.Initialize();
+        
+        timeSystem.StartGameLoop();
     }
 
     public void Stop() {
-        timeSystem.Stop = true;
+        timeSystem.StopGameLoop();
     }
 }
