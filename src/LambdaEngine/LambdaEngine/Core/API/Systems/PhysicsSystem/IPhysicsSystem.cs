@@ -5,11 +5,14 @@
 /// </summary>
 public interface IPhysicsSystem {
     /// <summary>
-    /// Creates a new physicsObject.
+    /// Initializes the physicsSystem.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public IPhysicsObject CreatePhysicsObject<T>() where T : IPhysicsObject;
+    public void Initialize();
+
+    /// <summary>
+    /// Moves the physics simulation forward by one step.
+    /// </summary>
+    public void SimulatePhysics();
     
     /// <summary>
     /// Creates a new circleCollider.
