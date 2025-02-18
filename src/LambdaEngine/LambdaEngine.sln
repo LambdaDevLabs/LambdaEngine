@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LambdaEngine", "LambdaEngine\LambdaEngine.csproj", "{F33A288B-96DC-42E6-B937-67595B90DF1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{5DC79036-4637-4E4E-9C08-98F3E644915D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EngineTest", "EngineTest\EngineTest.csproj", "{1C4404FC-CC99-4FA2-92F4-7E100CB6632A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{F33A288B-96DC-42E6-B937-67595B90DF1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F33A288B-96DC-42E6-B937-67595B90DF1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F33A288B-96DC-42E6-B937-67595B90DF1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DC79036-4637-4E4E-9C08-98F3E644915D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DC79036-4637-4E4E-9C08-98F3E644915D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DC79036-4637-4E4E-9C08-98F3E644915D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DC79036-4637-4E4E-9C08-98F3E644915D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C4404FC-CC99-4FA2-92F4-7E100CB6632A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C4404FC-CC99-4FA2-92F4-7E100CB6632A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C4404FC-CC99-4FA2-92F4-7E100CB6632A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C4404FC-CC99-4FA2-92F4-7E100CB6632A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
