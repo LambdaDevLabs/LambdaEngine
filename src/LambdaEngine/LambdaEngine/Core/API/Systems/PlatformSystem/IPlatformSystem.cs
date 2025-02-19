@@ -1,6 +1,6 @@
-﻿using LambdaEngine.PlatformSystem.AudioSystem;
-using LambdaEngine.PlatformSystem.InputSystem;
-using LambdaEngine.PlatformSystem.RenderSystem;
+﻿using LambdaEngine.AudioSystem;
+using LambdaEngine.InputSystem;
+using LambdaEngine.RenderSystem;
 
 namespace LambdaEngine.PlatformSystem;
 

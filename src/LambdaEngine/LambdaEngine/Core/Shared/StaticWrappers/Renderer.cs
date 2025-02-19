@@ -1,4 +1,4 @@
-﻿using LambdaEngine.PlatformSystem.RenderSystem;
+﻿using LambdaEngine.RenderSystem;
 
 namespace LambdaEngine;
 

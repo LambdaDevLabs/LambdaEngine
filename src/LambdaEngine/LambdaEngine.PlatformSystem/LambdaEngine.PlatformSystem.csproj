@@ -4,12 +4,22 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
-    
+
+    <ItemGroup>
+      <ProjectReference Include="..\LambdaEngine\LambdaEngine.csproj" />
+    </ItemGroup>
+
     <ItemGroup>
       <Reference Include="SDL3.Core">
         <HintPath>SDL3.Core.dll</HintPath>
       </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Update="SDL3.Core.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

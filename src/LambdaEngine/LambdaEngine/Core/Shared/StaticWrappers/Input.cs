@@ -1,4 +1,4 @@
-﻿using LambdaEngine.PlatformSystem.InputSystem;
+﻿using LambdaEngine.InputSystem;
 
 namespace LambdaEngine;
 
