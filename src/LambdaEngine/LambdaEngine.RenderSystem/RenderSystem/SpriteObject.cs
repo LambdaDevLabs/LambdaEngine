@@ -9,6 +9,7 @@ public unsafe struct SpriteObject {
     public Vector2 position;
     public Vector2 scale;
     public Color color;
+    public int pixelsPerUnit;
     
     public int TextureWidth {
         get => textureHandle->w;
@@ -28,5 +29,7 @@ public unsafe struct SpriteObject {
         position = Vector2.Zero;
         scale = Vector2.One;
         color = Color.White;
+        
+        pixelsPerUnit = 100;
     }
 }
