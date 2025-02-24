@@ -1,18 +1,16 @@
 ﻿namespace LambdaEngine.SceneModule;
 
 public class GameObject {
-    private readonly List<Component> components = new(16);
-    public Scene scene;
+    internal readonly List<Component> components = new(16);
+    internal readonly Scene scene;
     public required Transform transform;
+
+    internal GameObject(Scene scene) {
+        this.scene = scene;
+    }
     
     public T CreateComponent<T>() where T : Component, new() {
-        T c = new();
-        components.Add(c);
-        
-        c.gameObject = this;
-        c.transform = transform;
-        
-        c.Initialize();
+        T c = scene.CreateComponent<T>(this);
         
         return c;
     }
@@ -56,5 +54,9 @@ public class GameObject {
 
         component = null!;
         return false;
+    }
+
+    internal void RemoveComponent(Component component) {
+        components.Remove(component);
     }
 }

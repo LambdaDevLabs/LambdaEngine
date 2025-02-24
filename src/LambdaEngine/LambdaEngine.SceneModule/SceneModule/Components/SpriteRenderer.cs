@@ -5,7 +5,7 @@ namespace LambdaEngine.SceneModule;
 public class SpriteRenderer : Component, ITransformListener {
     public ISprite sprite;
 
-    public override void Initialize() {
+    internal override void Initialize() {
         transform.RegisterTransformListener(this);
     }
 
@@ -28,5 +28,13 @@ public class SpriteRenderer : Component, ITransformListener {
         }
         
         sprite.Position = transform.Position;
+    }
+
+    internal override void DestroyComponent() {
+        sprite.Destroy();
+
+        sprite = null!;
+        
+        base.DestroyComponent();
     }
 }

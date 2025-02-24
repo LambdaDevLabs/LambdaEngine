@@ -5,8 +5,8 @@ namespace LambdaEngine.SceneModule;
 public class Component {
     public GameObject gameObject;
     public Transform transform;
-    
-    public virtual void Initialize() { }
+
+    internal virtual void Initialize() { }
 
     public T CreateComponent<T>() where T : Component, new() {
         return gameObject.CreateComponent<T>();
@@ -26,5 +26,10 @@ public class Component {
 
     public GameObject Instantiate(Vector2 position) {
         return gameObject.scene.Instantiate(position);
-    } 
+    }
+
+    internal virtual void DestroyComponent() {
+        transform = null!;
+        gameObject = null!;
+    }
 }

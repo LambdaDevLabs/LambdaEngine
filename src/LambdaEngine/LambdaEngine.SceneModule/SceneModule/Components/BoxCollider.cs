@@ -3,13 +3,20 @@
 namespace LambdaEngine.SceneModule;
 
 public class BoxCollider : Component, ITransformListener {
-    public IBoxCollider boxCollider;
+    private IBoxCollider boxCollider;
 
-    public override void Initialize() {
-        boxCollider = Physics.CreateBoxCollider();
+    internal override void Initialize() {
+        boxCollider = Physics.CreateBoxCollider(); 
     }
 
     public void TransformUpdate(Transform transform) {
         boxCollider.Position = transform.Position;
+    }
+
+    internal override void DestroyComponent() {
+        boxCollider.Destroy();
+        boxCollider = null!;
+        
+        base.DestroyComponent();
     }
 }
