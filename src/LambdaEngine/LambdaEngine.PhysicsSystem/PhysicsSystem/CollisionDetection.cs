@@ -1,6 +1,6 @@
 namespace LambdaEngine.PhysicsSystem;
 
-public static class CollisionDetection {
+internal static class CollisionDetection {
     public static Memory<Collision> CheckCollisions(Span<ColliderObject> colliders) {
         Collision[] collisions = new Collision[(int)(colliders.Length * (colliders.Length - 1) * 0.5)];
         int nextCIndex = 0;

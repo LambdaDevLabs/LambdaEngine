@@ -15,7 +15,7 @@ public class GameObject {
         return c;
     }
 
-    public T GetComponent<T>() where T : Component, new() {
+    public T GetComponent<T>() where T : Component {
         foreach (Component component in components) {
             if (component is T t) {
                 return t;
@@ -29,7 +29,7 @@ public class GameObject {
         return components.ToArray();
     }
 
-    public T[] GetComponents<T>() where T : Component, new() {
+    public T[] GetComponents<T>() where T : Component {
         List<T> components_ = new(components.Count);
 
         foreach (Component component in components) {
@@ -42,7 +42,7 @@ public class GameObject {
         return components_.ToArray();
     }
 
-    public bool TryGetComponent<T>(out T component) where T : Component, new() {
+    public bool TryGetComponent<T>(out T component) where T : Component {
         foreach (Component c in components) {
             if (c is not T t) {
                 continue;

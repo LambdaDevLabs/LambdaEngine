@@ -1,4 +1,6 @@
-﻿namespace LambdaEngine.PhysicsSystem;
+﻿using System.Numerics;
+
+namespace LambdaEngine.PhysicsSystem;
 
 /// <summary>
 /// The physicsSystem is responsible for the physicsSimulation, e.g. CollisionDetection, -Resolution, etc.
@@ -13,22 +15,90 @@ public interface IPhysicsSystem {
     /// Moves the physics simulation forward by one step.
     /// </summary>
     public void SimulatePhysics();
-    
+
     /// <summary>
-    /// Creates a new circleCollider.
+    /// Returns all collisions for the collider with the specified id.
     /// </summary>
+    /// <param name="id"></param>
     /// <returns></returns>
-    public ICircleCollider CreateCircleCollider();
-    
+    public ICollection<int> GetCollisionsFor(int id);
+
     /// <summary>
     /// Creates a new boxCollider.
     /// </summary>
-    /// <returns></returns>
-    public IBoxCollider CreateBoxCollider();
-    
+    /// <returns>The id of the new collider.</returns>
+    public int CreateBoxCollider();
+
     /// <summary>
-    /// Creates a new rigidbody.
+    /// Creates a new circleCollider.
     /// </summary>
+    /// <returns>The id of the new collider.</returns>
+    public int CreateCircleCollider();
+
+    /// <summary>
+    /// Gets the position of the specified collider.
+    /// </summary>
+    /// <param name="id"></param>
     /// <returns></returns>
-    public IRigidbody CreateRigidbody();
+    public Vector2 GetColliderPosition(int id);
+
+    /// <summary>
+    /// Sets the position of the specified collider.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="position"></param>
+    public void SetColliderPosition(int id, Vector2 position);
+
+    /// <summary>
+    /// This method is only valid for BoxColliders.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public float GetColliderWidth(int id);
+
+    /// <summary>
+    /// This method is only valid for BoxColliders.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="width"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void SetColliderWidth(int id, float width);
+
+    /// <summary>
+    /// This method is only valid for BoxColliders.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public float GetColliderHeight(int id);
+
+    /// <summary>
+    /// This method is only valid for BoxColliders.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="height"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void SetColliderHeight(int id, float height);
+
+    /// <summary>
+    /// This method is only valid for CircleColliders.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public float GetColliderRadius(int id);
+
+    /// <summary>
+    /// This method is only valid for CircleColliders.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="radius"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    public void SetColliderRadius(int id, float radius);
+
+    /// <summary>
+    /// Destroys the collider with the specified id.
+    /// </summary>
+    /// <param name="id"></param>
+    public void DestroyCollider(int id);
 }

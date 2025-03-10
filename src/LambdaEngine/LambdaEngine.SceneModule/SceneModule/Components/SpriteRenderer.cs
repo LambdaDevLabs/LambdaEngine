@@ -31,6 +31,8 @@ public class SpriteRenderer : Component, ITransformListener {
     }
 
     internal override void DestroyComponent() {
+        transform.UnregisterTransformListener(this);
+        
         sprite.Destroy();
 
         sprite = null!;

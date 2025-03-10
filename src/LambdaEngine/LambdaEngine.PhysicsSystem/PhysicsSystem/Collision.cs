@@ -1,6 +1,6 @@
-namespace LambdaEngine.PhysicsSystem;
+﻿namespace LambdaEngine.PhysicsSystem;
 
-public readonly record struct Collision {
+internal readonly record struct Collision {
     /// <summary>
     /// The id of the first involved collider.
     /// </summary>

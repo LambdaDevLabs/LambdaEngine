@@ -7,6 +7,8 @@ public class Scene : IScene {
     private readonly List<GameObject> gameObjects = new(64);
     private readonly List<BehaviourComponent> behaviourComponents = new(64);
     private readonly List<BehaviourComponent> toStart = new(16);
+
+    private readonly List<Collider> colliders = new(32);
     
     private readonly List<GameObject> toDestroyGameObjects = new(16);
     private readonly List<Component> toDestroyComponents = new(16);
@@ -17,6 +19,7 @@ public class Scene : IScene {
 
     public void Initialize() {
         Time.SubscribeToStart(InvokeStartEvents);
+        Time.SubscribeToFixedUpdate(HandleFixedUpdate);
         Time.SubscribeToUpdate(InvokeUpdateEvents);
         Time.SubscribeToDestroy(InvokeDestroyEvents);
     }
@@ -53,6 +56,10 @@ public class Scene : IScene {
         t.Initialize();
 
         if (t is not BehaviourComponent bc) {
+            if (t is Collider c) {
+                colliders.Add(c);
+            }
+            
             return t;
         }
         
@@ -100,6 +107,51 @@ public class Scene : IScene {
             toStart.Remove(bc);
         }
     }
+
+    private void HandleFixedUpdate() {
+        List<BehaviourComponent> toFixedUpdate = new(behaviourComponents);
+        
+        foreach (BehaviourComponent bc in toFixedUpdate) {
+            if (sceneModule.typeEventMethodPointers[bc.GetType()].HasLifecycleEvent(LifecycleEvents.FIXED_UPDATE)) {
+                sceneModule.typeEventMethodPointers[bc.GetType()].fixedUpdateEventMethod!.Method.Invoke(bc, null);
+            }
+        }
+        
+        Physics.SimulatePhysics();
+
+        foreach (Collider collider in colliders) {
+            collider.ProcessCollisions();
+        }
+        
+        foreach (BehaviourComponent bc in toFixedUpdate) {
+            if (sceneModule.typeEventMethodPointers[bc.GetType()].HasLifecycleEvent(LifecycleEvents.COLLISION_ENTER)) {
+                foreach (Collider collider in bc.GetComponents<Collider>()) {
+                    foreach (Collision collision in collider.enteredCollisions) {
+                        sceneModule.typeEventMethodPointers[bc.GetType()].collisionEnterEventMethod!.Method.Invoke(bc,
+                            [collision]);
+                    }
+                }
+            }
+            
+            if (sceneModule.typeEventMethodPointers[bc.GetType()].HasLifecycleEvent(LifecycleEvents.COLLISION_STAY)) {
+                foreach (Collider collider in bc.GetComponents<Collider>()) {
+                    foreach (Collision collision in collider.stayedCollisions) {
+                        sceneModule.typeEventMethodPointers[bc.GetType()].collisionStayEventMethod!.Method.Invoke(bc,
+                            [collision]);
+                    }
+                }
+            }
+            
+            if (sceneModule.typeEventMethodPointers[bc.GetType()].HasLifecycleEvent(LifecycleEvents.COLLISION_EXIT)) {
+                foreach (Collider collider in bc.GetComponents<Collider>()) {
+                    foreach (Collision collision in collider.exitedCollisions) {
+                        sceneModule.typeEventMethodPointers[bc.GetType()].collisionExitEventMethod!.Method.Invoke(bc,
+                            [collision]);
+                    }
+                }
+            }
+        }
+    }
     
     private void InvokeUpdateEvents() {
         List<BehaviourComponent> toUpdate = new(behaviourComponents);
@@ -123,6 +175,10 @@ public class Scene : IScene {
                     
                     behaviourComponents.Remove(bc);
                     toStart.Remove(bc);
+                }
+
+                if (component is Collider c) {
+                    colliders.Remove(c);
                 }
                 
                 component.DestroyComponent();
