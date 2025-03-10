@@ -32,6 +32,11 @@ public class Sprite : ISprite {
         set => SpriteManager.Get(id).color = value;
     }
 
+    public int PixelsPerUnit {
+        get => SpriteManager.Get(id).pixelsPerUnit;
+        set => SpriteManager.Get(id).pixelsPerUnit = value;
+    }
+
     public IntPtr TextureHandle {
         get => SpriteManager.Get(id).TextureHandle;
     }

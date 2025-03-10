@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 using LambdaEngine.DebugSystem;
 using LambdaEngine.PlatformSystem;
 using SDL3;
@@ -37,27 +38,36 @@ public class DefaultRenderSystem : IRenderSystem {
     public ISprite CreateSprite(string path) {
         return Sprite.FromFile(path);
     }
-
+    
     public void Render() {
         SDL.SDL_SetRenderDrawColor(rendererHandle,
             BackgroundColor.R, BackgroundColor.G, BackgroundColor.B, BackgroundColor.A);
         
         SDL.SDL_RenderClear(rendererHandle);
 
+        float screenWidth = Platform.WindowWidth;  // Get the window width
+        float screenHeight = Platform.WindowHeight; // Get the window height
+
+        float camHeight = Camera.Size * 2;
+        float worldToScreenScale = screenHeight / camHeight;
+        
         foreach (SpriteObject sprite in SpriteManager.AsSpan()) {
+            float screenX = (sprite.position.X - Camera.Position.X) * worldToScreenScale + screenWidth / 2;
+            float screenY = screenHeight - ((sprite.position.Y - Camera.Position.Y) * worldToScreenScale + screenHeight / 2);
+
+            float scaledWidth = sprite.TextureWidth * sprite.scale.X * worldToScreenScale / Camera.PPU;
+            float scaledHeight = sprite.TextureHeight * sprite.scale.Y * worldToScreenScale / Camera.PPU;
+            
             SDL.SDL_FRect srcRect = new() {
                 x = 0,
                 y = 0,
                 w = sprite.TextureWidth,
                 h = sprite.TextureHeight
             };
-            
-            float scaledWidth = sprite.TextureWidth * sprite.scale.X;
-            float scaledHeight = sprite.TextureHeight * sprite.scale.Y;
-            
+
             SDL.SDL_FRect dstRect = new() {
-                x = sprite.position.X - scaledWidth * 0.5f,
-                y = sprite.position.Y - scaledHeight * 0.5f,
+                x = screenX - scaledWidth * 0.5f,
+                y = screenY - scaledHeight * 0.5f,
                 w = scaledWidth,
                 h = scaledHeight
             };
