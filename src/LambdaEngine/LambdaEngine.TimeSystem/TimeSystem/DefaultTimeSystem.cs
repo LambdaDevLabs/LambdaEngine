@@ -69,11 +69,11 @@ public class DefaultTimeSystem : ITimeSystem {
     
     private double fixedTimeAcc;
     private double fixedTime;
-    private double fixedDeltaTime = 0.2f;
+    private double fixedDeltaTime = 0.016666666666666666d;
     
     private double deltaTime;
     private double time;
-    private double maximumDeltaTime = 1/3f;
+    private double maximumDeltaTime = 0.3333333333333333d;
 
     public void StartGameLoop() {
         if (Running) {
