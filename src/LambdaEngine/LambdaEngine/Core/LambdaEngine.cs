@@ -53,6 +53,9 @@ public class LambdaEngine {
         physicsSystem.Initialize();
         
         Scene = startScene;
+        
+        Time.SubscribeToProcessInput(platformSystem.InputSystem.ProcessInput);
+        Time.SubscribeToRender(platformSystem.RenderSystem.Render);
     }
 
     public void Run() {
