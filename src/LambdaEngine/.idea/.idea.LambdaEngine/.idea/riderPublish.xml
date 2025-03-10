@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/LambdaEngine.RenderSystem/bin/Release/net8.0/win-x64/publish" />
         <option value="$PROJECT_DIR$/LambdaEngine.SceneModule/bin/Release/net8.0/win-x64/publish" />
         <option value="$PROJECT_DIR$/LambdaEngine.TimeSystem/bin/Release/net8.0/win-x64/publish" />
+        <option value="$PROJECT_DIR$/LambdaEngine/bin/Release/net8.0/win-x64/publish" />
       </list>
     </option>
   </component>

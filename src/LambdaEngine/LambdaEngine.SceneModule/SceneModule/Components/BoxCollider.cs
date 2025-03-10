@@ -1,15 +1,19 @@
-﻿using LambdaEngine.PhysicsSystem;
+﻿namespace LambdaEngine.SceneModule;
 
-namespace LambdaEngine.SceneModule;
-
-public class BoxCollider : Component, ITransformListener {
-    public IBoxCollider boxCollider;
-
-    public override void Initialize() {
-        boxCollider = Physics.CreateBoxCollider();
+public class BoxCollider : Collider {
+    public float Width {
+        get => Physics.GetColliderWidth(colliderId);
+        set => Physics.SetColliderWidth(colliderId, value);
     }
 
-    public void TransformUpdate(Transform transform) {
-        boxCollider.Position = transform.Position;
+    public float Height {
+        get => Physics.GetColliderHeight(colliderId);
+        set => Physics.SetColliderHeight(colliderId, value);
+    }
+    
+    internal override void Initialize() {
+        colliderId = Physics.CreateBoxCollider();
+        
+        base.Initialize();
     }
 }

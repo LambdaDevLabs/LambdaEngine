@@ -50,6 +50,8 @@ public class LambdaEngine {
         
         sceneModule.Initialize();
         
+        physicsSystem.Initialize();
+        
         Scene = startScene;
     }
 

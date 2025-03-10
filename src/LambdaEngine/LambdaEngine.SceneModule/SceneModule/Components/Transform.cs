@@ -35,4 +35,10 @@ public class Transform : Component {
     public void Translate(float x, float y) {
         Position += new Vector2(x, y);
     }
+
+    internal override void DestroyComponent() {
+        listeners.Clear();
+        
+        base.DestroyComponent();
+    }
 }
