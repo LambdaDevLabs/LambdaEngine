@@ -1,39 +1,73 @@
-﻿using LambdaEngine.RenderSystem;
+﻿using System.Numerics;
+using LambdaEngine.DebugSystem;
+using LambdaEngine.RenderSystem;
 
 namespace LambdaEngine.SceneModule;
 
 public class SpriteRenderer : Component, ITransformListener {
-    public ISprite sprite;
+    internal readonly int spriteRendererId;
+
+    private Vector2 scale;
+    private Sprite sprite;
+    private Color color;
+    private sbyte layer;
+
+    public Vector2 Scale {
+        get => scale;
+        set {
+            scale = value;
+            Renderer.SetRendererScale(spriteRendererId, scale);
+        }
+    }
+    public Sprite Sprite {
+        get => sprite;
+        set {
+            sprite = value;
+
+            Renderer.SetRendererSprite(spriteRendererId, sprite.spriteId);
+        }
+    }
+
+    public Color Color {
+        get => color;
+        set {
+            color = value;
+            Renderer.SetRendererColor(spriteRendererId, color);
+        }
+    }
+
+    public sbyte Layer {
+        get => layer;
+        set {
+            layer = value;
+            Renderer.SetRendererLayer(spriteRendererId, (byte)(layer + 128));
+        }
+    }
+
+    public SpriteRenderer() {
+        spriteRendererId = Renderer.CreateRenderer(RendererType.SPRITE);
+
+        scale = Vector2.One;
+        color = Color.White;
+        
+        Renderer.SetRendererPosition(spriteRendererId, Vector2.Zero);
+        Renderer.SetRendererScale(spriteRendererId, scale);
+        Renderer.SetRendererColor(spriteRendererId, color);
+        Renderer.SetRendererSprite(spriteRendererId, -1);
+    }
 
     internal override void Initialize() {
         transform.RegisterTransformListener(this);
     }
 
-    /// <summary>
-    /// Creates a new sprite from the specified path and assigns it to this <see cref="SpriteRenderer"/>.
-    /// </summary>
-    /// <param name="path"></param>
-    /// <returns></returns>
-    public ISprite CreateSprite(string path) {
-        sprite = Renderer.CreateSprite(path);
-
-        sprite.Position = transform.Position;
-        
-        return sprite;
-    }
-
     public void TransformUpdate(Transform transform) {
-        if (sprite == null) {
-            return;
-        }
-        
-        sprite.Position = transform.Position;
+        Renderer.SetRendererPosition(spriteRendererId, transform.Position);
     }
 
     internal override void DestroyComponent() {
         transform.UnregisterTransformListener(this);
         
-        sprite.Destroy();
+        Renderer.DestroyRenderer(spriteRendererId);
 
         sprite = null!;
         

@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using LambdaEngine.DebugSystem;
 
 namespace LambdaEngine.SceneModule;
 
@@ -54,6 +55,10 @@ public class Scene : IScene {
         t.transform = gameObject.transform;
         
         t.Initialize();
+
+        if (t is ITransformListener tl) {
+            tl.TransformUpdate(gameObject.transform);
+        }
 
         if (t is not BehaviourComponent bc) {
             if (t is Collider c) {

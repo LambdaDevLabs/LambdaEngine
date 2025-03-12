@@ -1,5 +1,4 @@
 ﻿using LambdaEngine.DebugSystem;
-using SDL3;
 
 namespace LambdaEngine.RenderSystem;
 
@@ -8,12 +7,10 @@ namespace LambdaEngine.RenderSystem;
 /// <summary>
 /// Manages all sprites in the render system.
 /// </summary>
-public static class SpriteManager {
+internal static class SpriteManager {
     private static Dictionary<int, int> spriteIdToPosition;
     private static Dictionary<int, int> spritePositionToId;
     private static SpriteObject[] sprites;
-
-    private static bool autoIncrement;
 
     private static Memory<SpriteObject> memory;
 
@@ -45,7 +42,7 @@ public static class SpriteManager {
     /// </summary>
     /// <param name="bufferSize">The initial capacity of the <see cref="SpriteManager"/>.</param>
     /// <exception cref="Exception">Throws an exception if the <see cref="SpriteManager"/> was already initialized.</exception>
-    public static void Initialize(int bufferSize, bool autoIncrement) {
+    public static void Initialize(int bufferSize) {
         if (IsInitialized) {
             throw new Exception("Cannot initialize; already initialized.");
         }
@@ -54,8 +51,6 @@ public static class SpriteManager {
         spriteIdToPosition = new Dictionary<int, int>(bufferSize);
         spritePositionToId = new Dictionary<int, int>(bufferSize);
         idProvider = new IdProvider(64 > bufferSize ? bufferSize : 64);
-        
-        SpriteManager.autoIncrement = autoIncrement;
 
         memory = sprites;
 
@@ -69,17 +64,13 @@ public static class SpriteManager {
     /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="SpriteManager"/>.</exception>
     public static unsafe int CreateSpriteFromFile(string path) {
         if (next >= sprites.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new sprite.");
-            }
+            IncrementCapacity();
         }
     
         int id = idProvider.NextId();
-        
-        sprites[next] = new SpriteObject(TexturePool.GetOrLoadTexture(path));
+
+        int textureId = TexturePool.LoadTexture(path);
+        sprites[next] = new SpriteObject(textureId);
         spriteIdToPosition.Add(id, next);
         spritePositionToId.Add(next++, id);
         
@@ -87,23 +78,18 @@ public static class SpriteManager {
     }
     
     /// <summary>
-    /// Creates a new <see cref="Sprite"/> based on the specified <paramref name="texture"/>.
+    /// Creates a new <see cref="Sprite"/> based on the specified texture.
     /// </summary>
     /// <returns>The id of the new <see cref="Sprite"/>.</returns>
     /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="SpriteManager"/>.</exception>
-    public static unsafe int CreateSpriteFromTexture(SDL.SDL_Texture* texture) {
+    public static unsafe int CreateSpriteFromTexture(int textureId) {
         if (next >= sprites.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new sprite.");
-            }
+            IncrementCapacity();
         }
     
         int id = idProvider.NextId();
         
-        sprites[next] = new SpriteObject(texture);
+        sprites[next] = new SpriteObject(textureId);
         spriteIdToPosition.Add(id, next);
         spritePositionToId.Add(next++, id);
         
@@ -118,17 +104,13 @@ public static class SpriteManager {
     /// <returns>True if the <see cref="Sprite"/> was successfully created, otherwise false.</returns>
     public static unsafe bool TryCreateSpriteFromFile(string path, out int id) {
         if (next >= sprites.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new sprite.");
-            }
+            IncrementCapacity();
         }
     
         id = idProvider.NextId();
         
-        sprites[next] = new SpriteObject(TexturePool.GetOrLoadTexture(path));
+        int textureId = TexturePool.LoadTexture(path);
+        sprites[next] = new SpriteObject(textureId);
         spriteIdToPosition.Add(id, next);
         spritePositionToId.Add(next++, id);
 
@@ -136,24 +118,19 @@ public static class SpriteManager {
     }
     
     /// <summary>
-    /// Attempts to create a new <see cref="Sprite"/> based on the specified <paramref name="texture"/>.
+    /// Attempts to create a new <see cref="Sprite"/> based on the specified texture.
     /// </summary>
-    /// <param name="texture">The texture that is used to create the <see cref="Sprite"/></param>
+    /// <param name="textureId">The id of the texture that is used to create the <see cref="Sprite"/></param>
     /// <param name="id">The id of the new <see cref="Sprite"/>.</param>
     /// <returns>True if the <see cref="Sprite"/> was successfully created, otherwise false.</returns>
-    public static unsafe bool TryCreateSpriteFromTexture(SDL.SDL_Texture* texture, out int id) {
+    public static unsafe bool TryCreateSpriteFromTexture(int textureId, out int id) {
         if (next >= sprites.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new sprite.");
-            }
+            IncrementCapacity();
         }
     
         id = idProvider.NextId();
         
-        sprites[next] = new SpriteObject(texture);
+        sprites[next] = new SpriteObject(textureId);
         spriteIdToPosition.Add(id, next);
         spritePositionToId.Add(next++, id);
 
