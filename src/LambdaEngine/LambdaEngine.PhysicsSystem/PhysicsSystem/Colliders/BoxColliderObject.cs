@@ -7,6 +7,12 @@ public struct BoxColliderObject {
     public float width;
     public float height;
 
+    public BoxColliderObject() {
+        position = Vector2.Zero;
+        width = 1;
+        height = 1;
+    }
+
     public BoxColliderObject(float width, float height) {
         position = Vector2.Zero;
         this.width = width;
