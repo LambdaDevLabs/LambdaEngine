@@ -64,6 +64,8 @@ public abstract class Collider : Component, ITransformListener {
     internal override void DestroyComponent() {
         transform.UnregisterTransformListener(this);
         
+        colliders.Remove(colliderId);
+        
         Physics.DestroyCollider(colliderId);
         
         base.DestroyComponent();
