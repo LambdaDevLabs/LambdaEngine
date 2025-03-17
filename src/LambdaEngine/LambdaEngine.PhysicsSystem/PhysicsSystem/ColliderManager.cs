@@ -1,6 +1,3 @@
-using System.Numerics;
-using LambdaEngine.DebugSystem;
-
 namespace LambdaEngine.PhysicsSystem;
 
 #nullable disable
@@ -8,7 +5,7 @@ namespace LambdaEngine.PhysicsSystem;
 /// <summary>
 /// Manages all colliders in the physics engine.
 /// </summary>
-public static class ColliderManager {
+internal static class ColliderManager {
     private static Dictionary<int, int> colliderIdToPosition;
     private static Dictionary<int, int> colliderPositionToId;
     private static ColliderObject[] colliders;

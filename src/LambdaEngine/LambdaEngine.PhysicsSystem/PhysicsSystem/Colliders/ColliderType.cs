@@ -1,6 +1,6 @@
 namespace LambdaEngine.PhysicsSystem;
 
-public enum ColliderType : byte {
+internal enum ColliderType : byte {
     BOX,
     CIRCLE
 }

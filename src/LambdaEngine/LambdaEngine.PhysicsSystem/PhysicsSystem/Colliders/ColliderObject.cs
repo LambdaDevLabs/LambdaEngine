@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace LambdaEngine.PhysicsSystem;
 
 [StructLayout(LayoutKind.Explicit)]
-public struct ColliderObject {
+internal struct ColliderObject {
     [FieldOffset(0)] public BoxColliderObject boxCollider;
     [FieldOffset(0)] public CircleColliderObject circleCollider;
 

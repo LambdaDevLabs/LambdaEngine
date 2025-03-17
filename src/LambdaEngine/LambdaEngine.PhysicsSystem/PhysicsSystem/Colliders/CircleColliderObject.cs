@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace LambdaEngine.PhysicsSystem;
 
-public struct CircleColliderObject {
+internal struct CircleColliderObject {
     public Vector2 position;
     public float radius;
 

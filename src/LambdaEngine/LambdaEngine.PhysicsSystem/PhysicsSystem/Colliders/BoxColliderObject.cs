@@ -2,7 +2,7 @@ using System.Numerics;
 
 namespace LambdaEngine.PhysicsSystem;
 
-public struct BoxColliderObject {
+internal struct BoxColliderObject {
     public Vector2 position;
     public float width;
     public float height;
