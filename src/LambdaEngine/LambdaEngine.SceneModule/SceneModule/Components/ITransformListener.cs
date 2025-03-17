@@ -1,5 +1,5 @@
 ﻿namespace LambdaEngine.SceneModule;
 
-public interface ITransformListener {
+internal interface ITransformListener {
     public void TransformUpdate(Transform transform);
 }

@@ -60,7 +60,7 @@ public class TextRenderer : Component, ITransformListener {
         transform.RegisterTransformListener(this);
     }
 
-    public void TransformUpdate(Transform transform) {
+    void ITransformListener.TransformUpdate(Transform transform) {
         Renderer.SetRendererPosition(textRendererId, transform.Position);
     }
 

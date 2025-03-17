@@ -20,11 +20,11 @@ public class Transform : Component {
         }
     }
 
-    public void RegisterTransformListener(ITransformListener listener) {
+    internal void RegisterTransformListener(ITransformListener listener) {
         listeners.Add(listener);
     }
 
-    public void UnregisterTransformListener(ITransformListener listener) {
+    internal void UnregisterTransformListener(ITransformListener listener) {
         listeners.Remove(listener);
     }
 

@@ -3,6 +3,9 @@ using LambdaEngine.DebugSystem;
 
 namespace LambdaEngine.SceneModule;
 
+/// <summary>
+/// Base class for all collider components.
+/// </summary>
 public abstract class Collider : Component, ITransformListener {
     private static readonly Dictionary<int, Collider> colliders = new(32);
 
@@ -14,6 +17,9 @@ public abstract class Collider : Component, ITransformListener {
     
     protected int colliderId;
 
+    /// <summary>
+    /// The position of the collider.
+    /// </summary>
     public Vector2 Position {
         get => Physics.GetColliderPosition(colliderId);
         set => Physics.SetColliderPosition(colliderId, value);
@@ -59,7 +65,7 @@ public abstract class Collider : Component, ITransformListener {
         oldCollisions.AddRange(collisions);
     }
 
-    public void TransformUpdate(Transform transform) {
+    void ITransformListener.TransformUpdate(Transform transform) {
         Physics.SetColliderPosition(colliderId, transform.Position);
     }
 
