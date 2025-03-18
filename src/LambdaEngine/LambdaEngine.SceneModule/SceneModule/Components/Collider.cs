@@ -49,7 +49,9 @@ public abstract class Collider : Component, ITransformListener {
         }
 
         foreach (int oldCollision in oldCollisions) {
-            exitedCollisions.Add(new Collision(colliders[oldCollision]));
+            exitedCollisions.Add(colliders.TryGetValue(oldCollision, out Collider collider)
+                ? new Collision(collider)
+                : new Collision(null!));
         }
         
         oldCollisions.Clear();
@@ -63,6 +65,8 @@ public abstract class Collider : Component, ITransformListener {
 
     internal override void DestroyComponent() {
         transform.UnregisterTransformListener(this);
+        
+        colliders.Remove(colliderId);
         
         Physics.DestroyCollider(colliderId);
         

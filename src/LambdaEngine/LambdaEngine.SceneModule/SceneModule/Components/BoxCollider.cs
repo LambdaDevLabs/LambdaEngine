@@ -1,4 +1,6 @@
-﻿namespace LambdaEngine.SceneModule;
+﻿using LambdaEngine.DebugSystem;
+
+namespace LambdaEngine.SceneModule;
 
 public class BoxCollider : Collider {
     public float Width {
