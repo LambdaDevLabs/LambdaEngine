@@ -4,14 +4,15 @@ public class Collision {
     /// <summary>
     /// The gameObject of the collider that was hit.
     /// </summary>
-    public GameObject gameObject;
+    public GameObject? gameObject;
     /// <summary>
     /// The collider that was hit.
     /// </summary>
-    public Collider collider;
+    public Collider? collider;
 
-    public Collision(Collider collider) {
+    public Collision(Collider? collider) {
         this.collider = collider;
-        this.gameObject = collider.gameObject;
+
+        gameObject = collider?.gameObject;
     }
 }

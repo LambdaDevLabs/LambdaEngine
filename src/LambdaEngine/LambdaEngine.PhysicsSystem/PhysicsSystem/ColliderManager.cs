@@ -87,59 +87,6 @@ public static class ColliderManager {
     }
     
     /// <summary>
-    /// Creates a new <see cref="BoxColliderObject"/> withthe specified <paramref name="width"/> and <paramref name="height"></paramref>.
-    /// </summary>
-    /// <param name="width">The width of the new <see cref="BoxColliderObject"/>.</param>
-    /// <param name="height">The height of the new <see cref="BoxColliderObject"/>.</param>
-    /// <returns>The wrapper object of the new <see cref="BoxColliderObject"/>.</returns>
-    /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="ColliderManager"/>.</exception>
-    public static int CreateNewBoxCollider(float width, float height) {
-        if (next >= colliders.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new collider.");
-            }
-        }
-
-        int id = idProvider.NextId();
-        
-        colliders[next] = new ColliderObject(id, new BoxColliderObject(width, height));
-        colliderIdToPosition.Add(id, next);
-        colliderPositionToId.Add(next++, id);
-
-        return id;
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="BoxColliderObject"/> with the specified <paramref name="width"/>, <paramref name="height"/> and <paramref name="position"/>.
-    /// </summary>
-    /// <param name="width">The width of the new <see cref="BoxColliderObject"/>.</param>
-    /// <param name="height">The height of the new <see cref="BoxColliderObject"/>.</param>
-    /// <param name="position">The position of the new <see cref="BoxColliderObject"/>.</param>
-    /// <returns>The wrapper object of the new <see cref="BoxColliderObject"/>.</returns>
-    /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="ColliderManager"/>.</exception>
-    public static int CreateNewBoxCollider(float width, float height, Vector2 position) {
-        if (next >= colliders.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new collider.");
-            }
-        }
-
-        int id = idProvider.NextId();
-        
-        colliders[next] = new ColliderObject(id, new BoxColliderObject(width, height, position));
-        colliderIdToPosition.Add(id, next);
-        colliderPositionToId.Add(next++, id);
-
-        return id;
-    }
-
-    /// <summary>
     /// Creates a new <see cref="CircleColliderObject"/>.
     /// </summary>
     /// <returns>The wrapper object of the new <see cref="CircleColliderObject"/>.</returns>
@@ -162,57 +109,6 @@ public static class ColliderManager {
 
         return id;
     }
-    
-    /// <summary>
-    /// Creates a new <see cref="CircleColliderObject"/> with the specified <paramref name="radius"/>.
-    /// </summary>
-    /// <param name="radius">The radius of the new <see cref="CircleColliderObject"/>.</param>
-    /// <returns>The wrapper object of the new <see cref="CircleColliderObject"/>.</returns>
-    /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="ColliderManager"/>.</exception>
-    public static int CreateNewCircleCollider(float radius) {
-        if (next >= colliders.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new collider.");
-            }
-        }
-
-        int id = idProvider.NextId();
-        
-        colliders[next] = new ColliderObject(id, new CircleColliderObject(radius));
-        colliderIdToPosition.Add(id, next);
-        colliderPositionToId.Add(next++, id);
-
-        return id;
-    }
-
-    /// <summary>
-    /// Creates a new <see cref="CircleColliderObject"/> with the specified <paramref name="radius"/> and <paramref name="position"/>.
-    /// </summary>
-    /// <param name="radius">The radius of the new <see cref="CircleColliderObject"/>.</param>
-    /// <param name="position">The position of the new <see cref="CircleColliderObject"/>.</param>
-    /// <returns>The wrapper object of the new <see cref="CircleColliderObject"/>.</returns>
-    /// <exception cref="Exception">Throws an exception if no capacity is left on the <see cref="ColliderManager"/>.</exception>
-    public static int CreateNewCircleCollider(float radius, Vector2 position) {
-        if (next >= colliders.Length) {
-            if (autoIncrement) {
-                IncrementCapacity();
-            }
-            else {
-                throw new Exception("Not enough capacity to add new collider.");
-            }
-        }
-
-        int id = idProvider.NextId();
-        
-        colliders[next] = new ColliderObject(id, new CircleColliderObject(radius, position));
-        colliderIdToPosition.Add(id, next);
-        colliderPositionToId.Add(next++, id);
-
-        return id;
-    }
 
     /// <summary>
     /// Destroys the <see cref="ColliderObject"/> with the specified id.
@@ -226,82 +122,40 @@ public static class ColliderManager {
         
         int last = next - 1;
 
-        if (id == last) {
+        if (cPos == last) {
             colliders[last] = default;
             colliderIdToPosition.Remove(id);
             colliderPositionToId.Remove(cPos);
+            idProvider.FreeId(id);
             next--;
         }
         else if (next == 1) {
             next = 0;
             colliderIdToPosition.Remove(id);
+            colliderPositionToId.Remove(0);
             idProvider.FreeId(id);
         }
         else {
+            int moveId = colliderPositionToId[last];
+            
             // Override the removed collider with the last collider to close the gap.
             colliders[cPos] = colliders[last];
-            // Remove the unused last collider for clarity, debugging nad possible threading.
+            // Remove the unused last collider for clarity, debugging and possible threading.
             colliders[last] = default;
-            // FInd the id of the last collider in the colliderValues dict.
-            // Update the position of the last collider.
-            colliderIdToPosition[colliderPositionToId[last]] = cPos;
+            // Find the id of the (formerly) last collider.
+            // Update the position of the (formerly) last collider.
+            colliderIdToPosition[moveId] = cPos;
+            // Update the id of the collider at the new position.
+            colliderPositionToId[cPos] = moveId;
             // Remove of id entry of the removed collider.
             colliderIdToPosition.Remove(id);
             // Remove the entry for the last collider from the colliderValues dict.
             colliderPositionToId.Remove(last);
-            // Update the id of the collider at the new position.
-            colliderPositionToId[cPos] = colliderIdToPosition[cPos];
-                
+            
             idProvider.FreeId(id);
                 
             next--;
         }
-    }
-    
-    /// <summary>
-    /// Attempts to destroy the <see cref="ColliderObject"/> with the specified id.
-    /// </summary>
-    /// <param name="id">The id of the <see cref="ColliderObject"/> to destroy.</param>
-    /// <returns>True id the <see cref="ColliderObject"/> was successfully removed, otherwise false.</returns>
-    public static bool TryDestroyCollider(int id) {
-        if (!colliderIdToPosition.TryGetValue(id, out int cPos)) {
-            return false;
-        }
-        
-        int last = next - 1;
-
-        if (id == last) {
-            colliders[last] = default;
-            colliderIdToPosition.Remove(id);
-            colliderPositionToId.Remove(cPos);
-            next--;
-        }
-        if (next == 1) {
-            next = 0;
-            colliderIdToPosition.Remove(id);
-            idProvider.FreeId(id);
-        }
-        else {
-            // Override the removed collider with the last collider to close the gap.
-            colliders[cPos] = colliders[last];
-            // Remove the unused last collider for clarity, debugging nad possible threading.
-            colliders[last] = default;
-            // Find the id of the last collider in the colliderValues dict.
-            // Update the position of the last collider.
-            colliderIdToPosition[colliderPositionToId[last]] = cPos;
-            // Remove of id entry of the removed collider.
-            colliderIdToPosition.Remove(id);
-            // Remove the entry for the last collider from the colliderValues dict.
-            colliderPositionToId.Remove(last);
-            // Update the id of the collider at the new position.
-            colliderPositionToId[cPos] = colliderIdToPosition[cPos];
-                
-            idProvider.FreeId(id);
-                
-            next--;
-        }
-
-        return true;
     }
 
     /// <summary>
@@ -354,11 +208,11 @@ public static class ColliderManager {
     /// <returns></returns>
     /// <exception cref="KeyNotFoundException">Throws an exception if not <see cref="ColliderObject"/> with the specified <paramref name="id"/> exists.</exception>
     public static ref ColliderObject Get(int id) {
-        if (id < 0 || id >= next) {
+        if (id < 0 || !colliderIdToPosition.TryGetValue(id, out int pos)) {
             throw new KeyNotFoundException($"The collider with the id {id} does not exist.");
         }
         
-        return ref colliders[colliderIdToPosition[id]];
+        return ref colliders[pos];
     }
 
     /// <summary>
