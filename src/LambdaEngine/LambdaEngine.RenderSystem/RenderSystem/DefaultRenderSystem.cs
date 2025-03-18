@@ -56,9 +56,9 @@ public class DefaultRenderSystem : IRenderSystem {
         float worldToScreenScale = screenHeight / camHeight;
         
         bool[] clearedLayers = new bool[layerTextures.Length];
-        clearedLayers[0] = true;
+        bool[] usedLayers = new bool[layerTextures.Length];
         
-        byte selectedLayer = 0;
+        int selectedLayer = -1;
         
         foreach (Renderer renderer in RendererManager.AsSpan()) {
             if (layerTextures[renderer.layer] == IntPtr.Zero) {
@@ -69,6 +69,7 @@ public class DefaultRenderSystem : IRenderSystem {
 
             if (renderer.layer != selectedLayer) {
                 selectedLayer = renderer.layer;
+                usedLayers[selectedLayer] = true;
                 SDL.SDL_SetRenderTarget(rendererHandle, layerTextures[renderer.layer]);
                 SDL.SDL_SetRenderDrawColor(rendererHandle, 0, 0, 0, 0); // Transparent clear
 
@@ -141,12 +142,19 @@ public class DefaultRenderSystem : IRenderSystem {
             w = screenWidth,
             h = screenHeight
         };
-        
-        foreach (IntPtr layerTexture in layerTextures) {
-            if (layerTexture != IntPtr.Zero) {
+
+        for (int i = 0; i < usedLayers.Length; i++) {
+            if (usedLayers[i]) {
+                IntPtr layerTexture = layerTextures[i];
                 SDL.SDL_RenderTexture(rendererHandle, layerTexture, ref rect, ref rect);
             }
         }
+        
+        // foreach (IntPtr layerTexture in layerTextures) {
+        //     if (layerTexture != IntPtr.Zero) {
+        //         SDL.SDL_RenderTexture(rendererHandle, layerTexture, ref rect, ref rect);
+        //     }
+        // }
         
         SDL.SDL_RenderPresent(rendererHandle);
     }
