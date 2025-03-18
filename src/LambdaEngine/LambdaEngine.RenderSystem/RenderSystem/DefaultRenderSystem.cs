@@ -10,8 +10,10 @@ namespace LambdaEngine.RenderSystem;
 /// </summary>
 public class DefaultRenderSystem : IRenderSystem {
     private const int TEXT_SIZE = 8;
-    
+
     private IntPtr rendererHandle;
+
+    private IntPtr[] layerTextures;
     
     public Color BackgroundColor { get; set; } = new(1, 0.392f, 0.584f, 0.929f);
 
@@ -30,6 +32,8 @@ public class DefaultRenderSystem : IRenderSystem {
         TexturePool.Initialize(rendererHandle, initTextureBufferSize);
         SpriteManager.Initialize(initSpriteBufferSize);
         RendererManager.Initialize(initRendererBufferSize);
+
+        layerTextures = new IntPtr[256];
 
         SDL.SDL_SetRenderVSync(rendererHandle, (int)vSyncMode);
         
@@ -50,8 +54,10 @@ public class DefaultRenderSystem : IRenderSystem {
 
         float camHeight = Camera.Size * 2;
         float worldToScreenScale = screenHeight / camHeight;
-
-        IntPtr[] layerTextures = new IntPtr[256];
+        
+        bool[] clearedLayers = new bool[layerTextures.Length];
+        clearedLayers[0] = true;
+        
         byte selectedLayer = 0;
         
         foreach (Renderer renderer in RendererManager.AsSpan()) {
@@ -65,7 +71,11 @@ public class DefaultRenderSystem : IRenderSystem {
                 selectedLayer = renderer.layer;
                 SDL.SDL_SetRenderTarget(rendererHandle, layerTextures[renderer.layer]);
                 SDL.SDL_SetRenderDrawColor(rendererHandle, 0, 0, 0, 0); // Transparent clear
-                SDL.SDL_RenderClear(rendererHandle);
+
+                if (clearedLayers[selectedLayer] == false) {
+                    clearedLayers[selectedLayer] = true;
+                    SDL.SDL_RenderClear(rendererHandle);
+                }
             }
             
             switch (renderer.rendererType) {
@@ -135,8 +145,6 @@ public class DefaultRenderSystem : IRenderSystem {
         foreach (IntPtr layerTexture in layerTextures) {
             if (layerTexture != IntPtr.Zero) {
                 SDL.SDL_RenderTexture(rendererHandle, layerTexture, ref rect, ref rect);
-                
-                SDL.SDL_DestroyTexture(layerTexture);
             }
         }
         
