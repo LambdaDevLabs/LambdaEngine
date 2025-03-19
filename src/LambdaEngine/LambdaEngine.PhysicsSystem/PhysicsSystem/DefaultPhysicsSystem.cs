@@ -16,6 +16,14 @@ public class DefaultPhysicsSystem : IPhysicsSystem {
         
         Debug.Log("DefaultPhysicsSystem initialized.", LogLevel.INFO);
     }
+
+    public void Shutdown() {
+        collisions = null!;
+        
+        ColliderManager.Cleanup();
+        
+        Debug.Log("DefaultPhysicsSystem shut down.", LogLevel.INFO);
+    }
     
     public void SimulatePhysics() {
         collisions.Clear();
