@@ -6,12 +6,15 @@ namespace LambdaEngine.SceneModule;
 
 public class SpriteRenderer : Component, ITransformListener {
     internal readonly int spriteRendererId;
-
+    
     private Vector2 scale;
     private Sprite sprite;
     private Color color;
     private sbyte layer;
 
+    /// <summary>
+    /// The x and y scale of the sprite.
+    /// </summary>
     public Vector2 Scale {
         get => scale;
         set {
@@ -19,6 +22,10 @@ public class SpriteRenderer : Component, ITransformListener {
             Renderer.SetRendererScale(spriteRendererId, scale);
         }
     }
+    
+    /// <summary>
+    /// The sprite to be rendered.
+    /// </summary>
     public Sprite Sprite {
         get => sprite;
         set {
@@ -28,6 +35,9 @@ public class SpriteRenderer : Component, ITransformListener {
         }
     }
 
+    /// <summary>
+    /// The color applied to the sprite.
+    /// </summary>
     public Color Color {
         get => color;
         set {
@@ -36,6 +46,9 @@ public class SpriteRenderer : Component, ITransformListener {
         }
     }
 
+    /// <summary>
+    /// The rendering layer of the sprite.
+    /// </summary>
     public sbyte Layer {
         get => layer;
         set {

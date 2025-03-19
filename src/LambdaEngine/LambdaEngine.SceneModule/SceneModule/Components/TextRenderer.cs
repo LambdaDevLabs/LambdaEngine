@@ -12,6 +12,9 @@ public class TextRenderer : Component, ITransformListener {
     private Color color;
     private sbyte layer;
 
+    /// <summary>
+    /// The scale of the text.
+    /// </summary>
     public Vector2 Scale {
         get => scale;
         set {
@@ -19,6 +22,10 @@ public class TextRenderer : Component, ITransformListener {
             Renderer.SetRendererScale(textRendererId, scale);
         }
     }
+    
+    /// <summary>
+    /// The text to be rendered.
+    /// </summary>
     public string Text {
         get => text;
         set {
@@ -28,6 +35,9 @@ public class TextRenderer : Component, ITransformListener {
         }
     }
 
+    /// <summary>
+    /// The color of the text.
+    /// </summary>
     public Color Color {
         get => color;
         set {
@@ -36,6 +46,9 @@ public class TextRenderer : Component, ITransformListener {
         }
     }
     
+    /// <summary>
+    /// The rendering layer of the text.
+    /// </summary>
     public sbyte Layer {
         get => layer;
         set {

@@ -25,10 +25,19 @@ public class Scene : IScene {
         Time.SubscribeToDestroy(InvokeDestroyEvents);
     }
 
+    /// <summary>
+    /// Instantiates a new gameObject.
+    /// </summary>
+    /// <returns></returns>
     public GameObject Instantiate() {
         return Instantiate(Vector2.Zero);
     }
 
+    /// <summary>
+    /// Instantiates a new gameObject at the specified position.
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public GameObject Instantiate(Vector2 position) {
         Transform transform = new() {
             Position = position
@@ -76,10 +85,18 @@ public class Scene : IScene {
         return t;
     }
 
+    /// <summary>
+    /// Marks the specified gameObject for destruction.
+    /// </summary>
+    /// <param name="gameObject"></param>
     public void Destroy(GameObject gameObject) {
         toDestroyGameObjects.Add(gameObject);
     }
 
+    /// <summary>
+    /// Marks the specified component for destruction.
+    /// </summary>
+    /// <param name="component"></param>
     public void Destroy(Component component) {
         toDestroyComponents.Add(component);
     }

@@ -3,6 +3,9 @@
 public class GameObject {
     internal readonly List<Component> components = new(16);
     internal readonly Scene scene;
+    /// <summary>
+    /// The transform of this gameObject.
+    /// </summary>
     public required Transform transform;
 
     internal GameObject(Scene scene) {
