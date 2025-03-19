@@ -25,8 +25,16 @@ public abstract class Component {
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public T GetComponent<T>() where T : Component {
+    public T GetComponent<T>() where T : class {
         return gameObject.GetComponent<T>();
+    }
+    
+    /// <summary>
+    /// Returns all components attached to this gameObject.
+    /// </summary>
+    /// <returns></returns>
+    public Component[] GetComponents() {
+        return gameObject.GetComponents();
     }
     
     /// <summary>
@@ -34,7 +42,7 @@ public abstract class Component {
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public T[] GetComponents<T>() where T : Component {
+    public T[] GetComponents<T>() where T : class {
         return gameObject.GetComponents<T>();
     }
 
@@ -44,8 +52,17 @@ public abstract class Component {
     /// <param name="component">The retrieved component. If no component was found, this is null.</param>
     /// <typeparam name="T"></typeparam>
     /// <returns>True if a component was found, otherwise false.</returns>
-    public bool TryGetComponent<T>(out T component) where T : Component {
+    public bool TryGetComponent<T>(out T component) where T : class {
         return gameObject.TryGetComponent(out component);
+    }
+    
+    /// <summary>
+    /// Returns true if the gameObject has at least one component of the specified type.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public bool HasComponent<T>() where T : class {
+        return gameObject.HasComponent<T>();
     }
 
     /// <summary>
