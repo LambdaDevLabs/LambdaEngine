@@ -7,14 +7,24 @@ public class DefaultPhysicsSystem : IPhysicsSystem {
     public int initColliderManagerBufferSize = 64;
     public bool colliderManagerAutoBufferIncrement = true;
 
+    private bool enableDebugging;
+
     private Dictionary<int, List<int>> collisions;
-    
+
     public void Initialize() {
+        Initialize(false);
+    }
+    
+    public void Initialize(bool disableDebugging) {
+        this.enableDebugging = !disableDebugging;
+        
         ColliderManager.Initialize(initColliderManagerBufferSize, colliderManagerAutoBufferIncrement);
         
         collisions = new Dictionary<int, List<int>>(initColliderManagerBufferSize);
         
-        Debug.Log("DefaultPhysicsSystem initialized.", LogLevel.INFO);
+        if (enableDebugging) {
+            Debug.Log("DefaultPhysicsSystem initialized.", LogLevel.INFO);
+        }
     }
 
     public void Shutdown() {
@@ -22,7 +32,9 @@ public class DefaultPhysicsSystem : IPhysicsSystem {
         
         ColliderManager.Cleanup();
         
-        Debug.Log("DefaultPhysicsSystem shut down.", LogLevel.INFO);
+        if (enableDebugging) {
+            Debug.Log("DefaultPhysicsSystem shut down.", LogLevel.INFO);
+        }
     }
     
     public void SimulatePhysics() {
